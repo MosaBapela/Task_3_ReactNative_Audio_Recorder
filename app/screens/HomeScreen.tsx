@@ -85,12 +85,18 @@ export const HomeScreen = ({ navigation }: any) => {
 
   const handleDeleteNote = async (noteId: string) => {
     try {
+      console.log('HomeScreen: handleDeleteNote called with noteId:', noteId);
       if (playingNoteId === noteId) {
+        console.log('HomeScreen: Stopping playback for noteId:', noteId);
         await stopPlayback();
       }
+      console.log('HomeScreen: Calling storageService.deleteVoiceNote');
       await storageService.deleteVoiceNote(noteId);
+      console.log('HomeScreen: Calling loadNotes to refresh list');
       await loadNotes();
+      console.log('HomeScreen: Delete operation completed');
     } catch (error) {
+      console.error('HomeScreen: Delete error:', error);
       Alert.alert('Error', 'Failed to delete recording');
     }
   };

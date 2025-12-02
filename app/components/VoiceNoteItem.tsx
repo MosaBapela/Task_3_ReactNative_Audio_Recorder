@@ -23,6 +23,7 @@ const VoiceNoteItem: React.FC<VoiceNoteItemProps> = ({
   onPress,
 }) => {
   const handleDelete = () => {
+    console.log('VoiceNoteItem: handleDelete called for note:', note.id);
     onDelete(); // Delete immediately without confirmation
   };
 

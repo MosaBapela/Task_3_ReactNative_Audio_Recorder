@@ -90,6 +90,15 @@ const RecordingScreen = ({ navigation }: any) => {
     );
   };
 
+  const handleCancelImmediate = async () => {
+    try {
+      await cancelRecording();
+      navigation.goBack();
+    } catch (error) {
+      Alert.alert('Error', 'Failed to cancel recording');
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -151,7 +160,7 @@ const RecordingScreen = ({ navigation }: any) => {
           <RecordButton isRecording={isRecording} onPress={handleStartStop} size={80} />
 
           {isRecording && (
-            <TouchableOpacity onPress={handleCancel} style={styles.controlButton}>
+            <TouchableOpacity onPress={handleCancelImmediate} style={styles.controlButton}>
               <Feather name="x" size={28} color={COLORS.white} />
             </TouchableOpacity>
           )}
