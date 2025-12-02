@@ -46,7 +46,7 @@ const RecordingScreen = ({ navigation }: any) => {
         const recordingTitle = title.trim() || `Recording ${new Date().toLocaleDateString()}`;
         await stopRecording(recordingTitle);
         Alert.alert('Success', 'Recording saved successfully!', [
-          { text: 'OK', onPress: () => navigation.goBack() }
+          { text: 'OK', onPress: () => navigation.navigate('Home') }
         ]);
       } catch (error) {
         Alert.alert('Error', 'Failed to save recording');

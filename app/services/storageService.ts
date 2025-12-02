@@ -60,18 +60,35 @@ class StorageService {
 
   async deleteVoiceNote(id: string): Promise<void> {
     try {
+      console.log('StorageService: Starting delete for note ID:', id);
       const notes = await this.getAllVoiceNotes();
+      console.log('StorageService: Found', notes.length, 'total notes');
+
       const noteToDelete = notes.find(n => n.id === id);
+      console.log('StorageService: Note to delete:', noteToDelete);
 
       if (noteToDelete && Platform.OS !== 'web') {
+        console.log('StorageService: Deleting file on native platform');
         const fileInfo = await FileSystem.getInfoAsync(noteToDelete.uri);
         if (fileInfo.exists) {
           await FileSystem.deleteAsync(noteToDelete.uri);
+          console.log('StorageService: File deleted successfully');
+        } else {
+          console.log('StorageService: File does not exist');
         }
+      } else {
+        console.log('StorageService: Skipping file deletion (web platform or note not found)');
       }
 
       const updatedNotes = notes.filter(n => n.id !== id);
+      console.log('StorageService: Filtered notes count:', updatedNotes.length);
+
       await AsyncStorage.setItem(VOICE_NOTES_KEY, JSON.stringify(updatedNotes));
+      console.log('StorageService: Notes saved to AsyncStorage');
+
+      // Verify the deletion
+      const verifyNotes = await this.getAllVoiceNotes();
+      console.log('StorageService: Verification - notes after deletion:', verifyNotes.length);
     } catch (error) {
       console.error('Delete voice note error:', error);
       throw error;

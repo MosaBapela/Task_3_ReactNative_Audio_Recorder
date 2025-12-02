@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import React from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '../constants/colors';
 import { VoiceNote } from '../types';
 import { formatDate } from '../utils/dateFormatter';
@@ -23,14 +23,7 @@ const VoiceNoteItem: React.FC<VoiceNoteItemProps> = ({
   onPress,
 }) => {
   const handleDelete = () => {
-    Alert.alert(
-      'Delete Recording',
-      'Are you sure you want to delete this voice note?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: onDelete },
-      ]
-    );
+    onDelete(); // Delete immediately without confirmation
   };
 
   return (
