@@ -1,6 +1,6 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import { useEffect, useState } from 'react';
-import { AppState } from 'react-native';
+import { AppState, Platform } from 'react-native';
 import audioService from '../services/audioService';
 import storageService from '../services/storageService';
 import { VoiceNote } from '../types';
@@ -52,7 +52,13 @@ export const useAudioRecorder = () => {
       setIsRecording(false);
       setIsPaused(false);
 
-      const fileInfo = await FileSystem.getInfoAsync(uri);
+      if (!uri) return null; // No recording was in progress
+
+      let fileSize = 0;
+      if (Platform.OS !== 'web') {
+        const fileInfo = await FileSystem.getInfoAsync(uri);
+        fileSize = fileInfo.exists ? fileInfo.size : 0;
+      }
 
       const note: VoiceNote = {
         id: Date.now().toString(),
@@ -60,7 +66,7 @@ export const useAudioRecorder = () => {
         duration: currentTime,
         date: new Date(),
         uri,
-        fileSize: fileInfo.exists ? fileInfo.size : 0,
+        fileSize,
       };
 
       await storageService.saveVoiceNote(note);
@@ -95,7 +101,7 @@ export const useAudioRecorder = () => {
   const cancelRecording = async () => {
     try {
       await audioService.stopRecording();
-      if (recordingUri) {
+      if (recordingUri && Platform.OS !== 'web') {
         const fileInfo = await FileSystem.getInfoAsync(recordingUri);
         if (fileInfo.exists) {
           await FileSystem.deleteAsync(recordingUri);

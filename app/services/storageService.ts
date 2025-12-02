@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system/legacy';
+import { Platform } from 'react-native';
 import { AppSettings, VoiceNote } from '../types';
 
 const VOICE_NOTES_KEY = '@voice_notes';
@@ -12,6 +13,7 @@ class StorageService {
   }
 
   async initializeStorage() {
+    if (Platform.OS === 'web') return; // Skip on web
     try {
       const dirInfo = await FileSystem.getInfoAsync(AUDIO_DIR);
       if (!dirInfo.exists) {
@@ -24,6 +26,14 @@ class StorageService {
 
   async saveVoiceNote(note: VoiceNote): Promise<void> {
     try {
+      if (Platform.OS === 'web') {
+        // Convert blob to base64 data URL
+        const response = await fetch(note.uri);
+        const blob = await response.blob();
+        const base64 = await this.blobToBase64(blob);
+        note.uri = base64;
+        note.fileSize = base64.length; // Approximate size
+      }
       const notes = await this.getAllVoiceNotes();
       notes.unshift(note);
       await AsyncStorage.setItem(VOICE_NOTES_KEY, JSON.stringify(notes));
@@ -52,8 +62,8 @@ class StorageService {
     try {
       const notes = await this.getAllVoiceNotes();
       const noteToDelete = notes.find(n => n.id === id);
-      
-      if (noteToDelete) {
+
+      if (noteToDelete && Platform.OS !== 'web') {
         const fileInfo = await FileSystem.getInfoAsync(noteToDelete.uri);
         if (fileInfo.exists) {
           await FileSystem.deleteAsync(noteToDelete.uri);
@@ -130,7 +140,7 @@ class StorageService {
     try {
       const notes = await this.getAllVoiceNotes();
       const settings = await this.getSettings();
-      
+
       const backup = {
         notes,
         settings,
@@ -138,9 +148,13 @@ class StorageService {
         version: '1.0.0'
       };
 
-      const backupPath = `${AUDIO_DIR}backup_${Date.now()}.json`;
-      await FileSystem.writeAsStringAsync(backupPath, JSON.stringify(backup));
-      return backupPath;
+      if (Platform.OS === 'web') {
+        return JSON.stringify(backup); // Return JSON string on web
+      } else {
+        const backupPath = `${AUDIO_DIR}backup_${Date.now()}.json`;
+        await FileSystem.writeAsStringAsync(backupPath, JSON.stringify(backup));
+        return backupPath;
+      }
     } catch (error) {
       console.error('Export backup error:', error);
       throw error;
@@ -149,7 +163,12 @@ class StorageService {
 
   async importBackup(uri: string): Promise<void> {
     try {
-      const content = await FileSystem.readAsStringAsync(uri);
+      let content: string;
+      if (Platform.OS === 'web') {
+        content = uri; // uri is the JSON string on web
+      } else {
+        content = await FileSystem.readAsStringAsync(uri);
+      }
       const backup = JSON.parse(content);
       if (backup.notes) {
         await AsyncStorage.setItem(VOICE_NOTES_KEY, JSON.stringify(backup.notes));
@@ -191,6 +210,15 @@ class StorageService {
     const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+  }
+
+  private async blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
   }
 }
 

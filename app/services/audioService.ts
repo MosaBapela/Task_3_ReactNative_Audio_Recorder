@@ -36,8 +36,8 @@ class AudioService {
 
   async stopRecording(): Promise<string> {
     try {
-      if (!this.recording) throw new Error('No recording in progress');
-      
+      if (!this.recording) return '';
+
       await this.recording.stopAndUnloadAsync();
       const uri = this.recording.getURI() || '';
       this.recording = null;
@@ -49,6 +49,7 @@ class AudioService {
       return uri;
     } catch (error) {
       console.error('Stop recording error:', error);
+      this.recording = null;
       throw error;
     }
   }
