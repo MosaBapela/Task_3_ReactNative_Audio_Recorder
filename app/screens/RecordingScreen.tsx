@@ -1,22 +1,22 @@
 import { Feather } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { RecordButton } from '../components/RecordButton';
+import RecordButton from '../components/RecordButton';
 import { COLORS } from '../constants/colors';
 import { useAudioRecorder } from '../hooks/useAudioRecorder';
 import storageService from '../services/storageService';
 import { formatTime } from '../utils/timeFormatter';
 
-export const RecordingScreen = ({ navigation }: any) => {
+const RecordingScreen = ({ navigation }: any) => {
   const [title, setTitle] = useState('');
   const [quality, setQuality] = useState<'low' | 'medium' | 'high'>('high');
 
@@ -261,3 +261,5 @@ const styles = StyleSheet.create({
   },
   qualityText: { fontSize: 12, color: COLORS.white, fontWeight: '600' },
 });
+
+export default RecordingScreen;

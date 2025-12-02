@@ -9,7 +9,7 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({
+const SearchBar: React.FC<SearchBarProps> = ({
   value,
   onChangeText,
   placeholder = 'Search notes...'
@@ -51,3 +51,5 @@ const styles = StyleSheet.create({
   input: { flex: 1, color: COLORS.white, fontSize: 16 },
   clearIcon: { padding: 4 },
 });
+
+export default SearchBar;

@@ -2,16 +2,16 @@ import { Feather } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    Alert,
-    FlatList,
-    RefreshControl,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { SearchBar } from '../components/SearchBar';
-import { VoiceNoteItem } from '../components/VoiceNoteItem';
+import SearchBar from '../components/SearchBar';
+import VoiceNoteItem from '../components/VoiceNoteItem';
 import { COLORS } from '../constants/colors';
 import { useAudioPlayer } from '../hooks/useAudioPlayer';
 import storageService from '../services/storageService';

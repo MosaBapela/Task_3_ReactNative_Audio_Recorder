@@ -9,7 +9,7 @@ interface WaveformVisualizerProps {
   height?: number;
 }
 
-export const WaveformVisualizer: React.FC<WaveformVisualizerProps> = ({
+const WaveformVisualizer: React.FC<WaveformVisualizerProps> = ({
   isActive = false,
   barCount = 50,
   height = 40,
@@ -53,3 +53,5 @@ export const WaveformVisualizer: React.FC<WaveformVisualizerProps> = ({
 const styles = StyleSheet.create({
   container: { width: '100%' },
 });
+
+export default WaveformVisualizer;

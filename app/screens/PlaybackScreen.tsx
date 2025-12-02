@@ -2,14 +2,14 @@ import { Feather } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import React, { useEffect, useState } from 'react';
 import {
-    Alert,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { WaveformVisualizer } from '../components/WaveformVisualizer';
+import WaveformVisualizer from '../components/WaveformVisualizer';
 import { COLORS } from '../constants/colors';
 import { useAudioPlayer } from '../hooks/useAudioPlayer';
 import storageService from '../services/storageService';
@@ -17,7 +17,7 @@ import { VoiceNote } from '../types';
 import { formatDate } from '../utils/dateFormatter';
 import { formatTime } from '../utils/timeFormatter';
 
-export const PlaybackScreen = ({ route, navigation }: any) => {
+const PlaybackScreen = ({ route, navigation }: any) => {
   const { note } = route.params as { note: VoiceNote };
   const [editedTitle, setEditedTitle] = useState(note.title);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -276,11 +276,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.tertiary,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
   },
   stopButton: {
     width: 48,
@@ -301,3 +297,5 @@ const styles = StyleSheet.create({
   infoLabel: { fontSize: 12, color: COLORS.light, marginBottom: 4 },
   infoValue: { fontSize: 16, color: COLORS.white, fontWeight: '600' },
 });
+
+export default PlaybackScreen;

@@ -1,4 +1,4 @@
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 import audioService from '../services/audioService';
@@ -60,7 +60,7 @@ export const useAudioRecorder = () => {
         duration: currentTime,
         date: new Date(),
         uri,
-        fileSize: fileInfo.size || 0,
+        fileSize: fileInfo.exists ? fileInfo.size : 0,
       };
 
       await storageService.saveVoiceNote(note);

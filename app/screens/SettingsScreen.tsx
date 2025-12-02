@@ -15,7 +15,7 @@ import { COLORS } from '../constants/colors';
 import storageService from '../services/storageService';
 import { AppSettings } from '../types';
 
-export const SettingsScreen = ({ navigation }: any) => {
+const SettingsScreen = ({ navigation }: any) => {
   const [settings, setSettings] = useState<AppSettings>({
     recordingQuality: 'high',
     playbackSpeed: 1.0,
@@ -68,8 +68,8 @@ export const SettingsScreen = ({ navigation }: any) => {
         type: 'application/json',
       });
 
-      if (result.type === 'success') {
-        await storageService.importBackup(result.uri);
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        await storageService.importBackup(result.assets[0].uri);
         Alert.alert('Success', 'Backup imported successfully!');
         loadStorageInfo();
       }
@@ -271,3 +271,5 @@ const styles = StyleSheet.create({
   buttonTextSecondary: { color: COLORS.tertiary },
   aboutText: { fontSize: 14, color: COLORS.gray, marginBottom: 8, textAlign: 'center' },
 });
+
+export default SettingsScreen;

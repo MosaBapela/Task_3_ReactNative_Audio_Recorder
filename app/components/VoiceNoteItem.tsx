@@ -5,7 +5,7 @@ import { COLORS } from '../constants/colors';
 import { VoiceNote } from '../types';
 import { formatDate } from '../utils/dateFormatter';
 import { formatDuration } from '../utils/timeFormatter';
-import { WaveformVisualizer } from './WaveformVisualizer';
+import WaveformVisualizer from './WaveformVisualizer';
 
 interface VoiceNoteItemProps {
   note: VoiceNote;
@@ -15,7 +15,7 @@ interface VoiceNoteItemProps {
   onPress: () => void;
 }
 
-export const VoiceNoteItem: React.FC<VoiceNoteItemProps> = ({
+const VoiceNoteItem: React.FC<VoiceNoteItemProps> = ({
   note,
   isPlaying,
   onPlay,
@@ -67,11 +67,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
   },
   header: {
     flexDirection: 'row',
@@ -99,3 +95,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default VoiceNoteItem;

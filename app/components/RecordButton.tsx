@@ -9,7 +9,7 @@ interface RecordButtonProps {
   size?: number;
 }
 
-export const RecordButton: React.FC<RecordButtonProps> = ({
+const RecordButton: React.FC<RecordButtonProps> = ({
   isRecording,
   onPress,
   size = 80,
@@ -102,11 +102,9 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
   },
   stopSquare: { width: 24, height: 24, backgroundColor: COLORS.white, borderRadius: 4 },
 });
+
+export default RecordButton;
